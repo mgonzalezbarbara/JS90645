@@ -1,58 +1,71 @@
-// Constantes y arrays
-const PRECIO_ENTRADA = 1500;
 const peliculas = ["Avengers", "Spiderman", "Inside Out 2", "El Conjuro"];
+const precioEntrada = 1500;
 
-// Función para mostrar las películas y dejar elegir una
-function elegirPelicula() {
-  let mensaje = "¿Qué película querés ver?\n";
-  peliculas.forEach((peli, index) => {
-    mensaje += `${index + 1}. ${peli}\n`;
-  });
+const selectPelicula = document.getElementById("pelicula");
+const inputCantidad = document.getElementById("cantidad");
+const formulario = document.getElementById("formulario");
+const listaReservas = document.getElementById("reservas");
 
-  let opcion = parseInt(prompt(mensaje));
-  if (opcion >= 1 && opcion <= peliculas.length) {
-    return peliculas[opcion - 1];
-  } else {
-    alert("Opción no válida. Se canceló la reserva.");
-    return null;
+// Cargar las películas en el select
+peliculas.forEach(peli => {
+  const option = document.createElement("option");
+  option.value = peli;
+  option.textContent = peli;
+  selectPelicula.appendChild(option);
+});
+
+// Cargar reservas previas del localStorage
+let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+renderizarReservas();
+
+// Evento al enviar el formulario
+formulario.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const pelicula = selectPelicula.value;
+  const cantidad = parseInt(inputCantidad.value);
+
+  if (cantidad > 0) {
+    const total = cantidad * precioEntrada;
+    const nuevaReserva = { pelicula, cantidad, total };
+
+    reservas.push(nuevaReserva);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+
+    renderizarReservas();
+    formulario.reset();
   }
-}
+});
 
-// Función para pedir cantidad de entradas
-function pedirEntradas() {
-  let cantidad = parseInt(prompt("¿Cuántas entradas querés comprar?"));
-  if (isNaN(cantidad) || cantidad <= 0) {
-    alert("Cantidad inválida. Se canceló la reserva.");
-    return null;
-  }
-  return cantidad;
-}
+// Mostrar reservas en pantalla
+function renderizarReservas() {
+  listaReservas.innerHTML = "";
 
-// Función principal
-function simuladorCine() {
-  alert("¡Bienvenido/a al simulador de entradas al cine!");
-
-  const deseaContinuar = confirm("¿Querés hacer una reserva?");
-  if (!deseaContinuar) {
-    alert("Hasta luego 👋");
+  if (reservas.length === 0) {
+    const li = document.createElement("li");
+    li.classList.add("list-group-item");
+    li.textContent = "No hay reservas todavía.";
+    listaReservas.appendChild(li);
     return;
   }
 
-  const peliculaElegida = elegirPelicula();
-  if (!peliculaElegida) return;
-
-  const cantidadEntradas = pedirEntradas();
-  if (!cantidadEntradas) return;
-
-  const total = cantidadEntradas * PRECIO_ENTRADA;
-  alert(`Elegiste "${peliculaElegida}" y compraste ${cantidadEntradas} entradas.\nTotal a pagar: $${total}`);
-  console.log(`Película: ${peliculaElegida}`);
-  console.log(`Entradas: ${cantidadEntradas}`);
-  console.log(`Total: $${total}`);
+  reservas.forEach((reserva, index) => {
+    const li = document.createElement("li");
+    li.classList.add("list-group-item");
+    li.innerHTML = `
+      <strong>${reserva.pelicula}</strong> - ${reserva.cantidad} entradas - Total: $${reserva.total}
+      <button class="btn btn-sm btn-danger float-end" onclick="eliminarReserva(${index})">Eliminar</button>
+    `;
+    listaReservas.appendChild(li);
+  });
 }
 
-// Iniciar simulador
-simuladorCine();
+// Función para eliminar una reserva individual
+function eliminarReserva(index) {
+  reservas.splice(index, 1);
+  localStorage.setItem("reservas", JSON.stringify(reservas));
+  renderizarReservas();
+}
 
 
 

@@ -1,0 +1,8 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#reservas li {
+  background-color: #f8f9fa;
+  margin-bottom: 8px;
+}
