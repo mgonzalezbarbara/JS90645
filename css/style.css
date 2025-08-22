@@ -1,8 +1,9 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
+body { 
+    font-family: 'Segoe UI', sans-serif; 
 }
-
-#reservas li {
-  background-color: #f8f9fa;
-  margin-bottom: 8px;
+#reservas li { 
+    background-color: #f8f9fa; margin-bottom: 8px; 
+}
+.badge-precio { 
+    font-size: 0.9rem; 
 }

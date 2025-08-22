@@ -1,0 +1,6 @@
+[
+{ "id": 1, "titulo": "Avengers: Endgame", "precio": 2500, "clasificacion": "+13" },
+{ "id": 2, "titulo": "Spiderman: No Way Home", "precio": 2200, "clasificacion": "+13" },
+{ "id": 3, "titulo": "Inside Out 2", "precio": 2000, "clasificacion": "+7" },
+{ "id": 4, "titulo": "El Conjuro", "precio": 1800, "clasificacion": "+16" }
+]
